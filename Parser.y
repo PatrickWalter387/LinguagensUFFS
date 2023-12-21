@@ -30,6 +30,7 @@ import Lexer
     Bool        { TokenBoolean }
     Num         { TokenNumber }
     ':'         { TokenColon }
+    '^'         { TokenPow }
 
 %%
 
@@ -44,6 +45,7 @@ Exp         : num                           { Num $1 }
             | Exp Exp                       { App $1 $2 }
             | '(' Exp ')'                   { Paren $2 }
             | let var '=' Exp in Exp        { Let $2 $4 $6 }
+            | Exp '^' Exp                   { Pow $1 $3 }
 
 Type    : Bool                              { TBool }
         | Num                               { TNum }

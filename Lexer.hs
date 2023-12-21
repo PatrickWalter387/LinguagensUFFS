@@ -13,6 +13,7 @@ data Expr = BTrue
           | App Expr Expr
           | Paren Expr
           | Let String Expr Expr 
+          | Pow Expr Expr
           deriving Show
 
 data Ty = TBool 
@@ -39,10 +40,11 @@ data Token = TokenTrue
            | TokenColon
            | TokenBoolean 
            | TokenNumber
+           | TokenPow
            deriving (Show, Eq)
 
 isSymb :: Char -> Bool 
-isSymb c = c `elem` "+&\\->()=:"
+isSymb c = c `elem` "+&\\->()=:^"
 
 lexer :: String -> [Token]
 lexer [] = [] 
@@ -66,6 +68,7 @@ lexSymbol cs = case span isSymb cs of
                  ("->", rest) -> TokenArrow : lexer rest 
                  ("=", rest)  -> TokenEq : lexer rest 
                  (":", rest)  -> TokenColon : lexer rest 
+                 ("^", rest)  -> TokenPow : lexer rest 
                  _ -> error "Lexical error: invalid symbol!"
 
 lexKW :: String -> [Token]

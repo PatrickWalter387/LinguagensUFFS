@@ -40,6 +40,9 @@ step (App (Lam x t b) e2) | isValue e2 = subst x e2 b
 step (App e1 e2) = App (step e1) e2
 step (Let v e1 e2) | isValue e1 = subst v e1 e2 
                    | otherwise = Let v (step e1) e2
+step (Pow (Num n1) (Num n2)) = Num (n1 ^ n2)
+step (Pow (Num n1) e) = Pow (Num n1) (step e)
+step (Pow e1 e2) = Pow (step e1) e2 
 step e = error (show e)
 
 eval :: Expr -> Expr 
