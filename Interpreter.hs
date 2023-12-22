@@ -42,7 +42,9 @@ step (Let v e1 e2) | isValue e1 = subst v e1 e2
                    | otherwise = Let v (step e1) e2
 step (Pow (Num n1) (Num n2)) = Num (n1 ^ n2)
 step (Pow (Num n1) e) = Pow (Num n1) (step e)
-step (Pow e1 e2) = Pow (step e1) e2 
+step (Pow e1 e2) = Pow (step e1) e2
+step (RaizQ (Num n1)) = Num (truncate (sqrt (fromIntegral n1 :: Double)))
+step (RaizQ e1) = RaizQ (step e1)
 step e = error (show e)
 
 eval :: Expr -> Expr 
